@@ -1,4 +1,12 @@
+// @ts-ignore
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+
+// Declare Deno global for IDE type-checking outside of Deno runtime env
+declare const Deno: {
+  env: {
+    get(key: string): string | undefined
+  }
+}
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -6,7 +14,7 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -148,11 +156,12 @@ serve(async (req) => {
       )
     }
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Serverless function error:", error)
     return new Response(
-      JSON.stringify({ error: error.message || "An unexpected error occurred" }),
+      JSON.stringify({ error: error?.message || "An unexpected error occurred" }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
 })
+

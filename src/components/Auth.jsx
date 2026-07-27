@@ -80,7 +80,7 @@ export default function Auth() {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.value || e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@university.edu"
                 className="w-full bg-slate-900/60 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
               />
@@ -99,7 +99,7 @@ export default function Auth() {
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.value || e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="w-full bg-slate-900/60 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
               />
