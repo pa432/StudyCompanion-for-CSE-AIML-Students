@@ -21,6 +21,8 @@ export default function Dashboard({
   setActiveTab,
   selectedTopic,
   selectedSubtopic,
+  progress = [],
+  startPractice = () => { },
 }) {
   const nextLevelXp = userStats.level * 500
   const currentLevelProgress = Math.min(100, Math.round(((userStats.totalXp % 500) / 500) * 100))
@@ -116,6 +118,49 @@ export default function Dashboard({
         </div>
       </div>
 
+      {/* Up for Review (Spaced Repetition) */}
+      {(() => {
+        const now = new Date()
+        const dueReviews = progress
+          .filter((p) => p.next_review_at && new Date(p.next_review_at) <= now)
+          .sort((a, b) => new Date(a.next_review_at) - new Date(b.next_review_at))
+          .slice(0, 3)
+
+        if (dueReviews.length === 0) return null
+
+        return (
+          <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
+                <Clock className="h-5 w-5 text-amber-400" /> Up for Review
+              </h2>
+              <span className="text-xs text-amber-400 bg-amber-400/10 px-2 py-1 rounded-full font-semibold">
+                {dueReviews.length} Due
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {dueReviews.map((review) => (
+                <div key={`${review.topic}-${review.subtopic}`} className="bg-slate-950/50 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition-all group">
+                  <div className="mb-4">
+                    <h3 className="text-sm font-bold text-white truncate group-hover:text-amber-300 transition-colors">{review.subtopic}</h3>
+                    <p className="text-[10px] text-slate-400 uppercase tracking-wider truncate mt-0.5">{review.topic}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded">Streak: {review.current_streak || 0}</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => startPractice(review.topic, review.subtopic)}
+                    className="w-full py-2 bg-slate-900 border border-slate-700 hover:bg-amber-500 hover:border-amber-500 hover:text-white text-slate-300 text-xs font-semibold rounded-lg transition-all"
+                  >
+                    Practice Now
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      })()}
+
       {/* Feature Navigation Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div
@@ -194,11 +239,10 @@ export default function Dashboard({
           {BADGES.map((badge) => (
             <div
               key={badge.id}
-              className={`p-4 rounded-xl border flex flex-col items-center text-center space-y-2 transition-all ${
-                badge.unlocked
-                  ? 'bg-violet-950/20 border-violet-500/30 text-white'
-                  : 'bg-slate-950/40 border-slate-800/60 opacity-50 grayscale'
-              }`}
+              className={`p-4 rounded-xl border flex flex-col items-center text-center space-y-2 transition-all ${badge.unlocked
+                ? 'bg-violet-950/20 border-violet-500/30 text-white'
+                : 'bg-slate-950/40 border-slate-800/60 opacity-50 grayscale'
+                }`}
             >
               <div className="text-3xl mb-1">{badge.icon}</div>
               <div className="text-xs font-bold">{badge.title}</div>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Code2, Play, MessageSquare, Loader2 } from 'lucide-react'
-import { StatsGrid, DifficultySelector } from './StatsCards'
+import { StatsGrid } from './StatsCards'
 
 const DEFAULT_TOPICS_MAP = {
   'Data Structures & Algorithms': [
@@ -32,16 +32,15 @@ export default function TopicPicker({
   selectedSubtopic,
   setSelectedTopic,
   setSelectedSubtopic,
-  difficulty,
-  setDifficulty,
+
   startPractice,
   startChat,
   onStartPractice,
   onStartChat,
   getSubtopicProgress,
 }) {
-  const handleStartPractice = onStartPractice || startPractice || (() => {})
-  const handleStartChat = onStartChat || startChat || (() => {})
+  const handleStartPractice = onStartPractice || startPractice || (() => { })
+  const handleStartChat = onStartChat || startChat || (() => { })
 
   // Compute grouped topics if topics array is passed
   const effectiveGroupedTopics = (() => {
@@ -86,8 +85,6 @@ export default function TopicPicker({
       {/* Quick Stats */}
       <StatsGrid progress={progress} />
 
-      {/* Difficulty */}
-      <DifficultySelector difficulty={difficulty} setDifficulty={setDifficulty} />
 
       {/* Topic List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -112,11 +109,10 @@ export default function TopicPicker({
                       setSelectedTopic(topicName)
                       setSelectedSubtopic(sub)
                     }}
-                    className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-3 ${
-                      isSelected
+                    className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-3 ${isSelected
                         ? 'bg-violet-600/10 border-violet-500/40 shadow-sm shadow-violet-500/5'
                         : 'bg-slate-950/40 border-slate-900 hover:border-slate-800 hover:bg-slate-900/20'
-                    }`}
+                      }`}
                   >
                     <div className="space-y-1 min-w-0">
                       <p className="font-semibold text-white text-sm">{sub}</p>
@@ -133,9 +129,8 @@ export default function TopicPicker({
                       {prog.total > 0 && (
                         <div className="w-full max-w-[120px] bg-slate-900 rounded-full h-1 mt-1">
                           <div
-                            className={`h-1 rounded-full animate-progress ${
-                              prog.accuracy < 50 ? 'bg-red-500' : prog.accuracy < 75 ? 'bg-amber-500' : 'bg-emerald-500'
-                            }`}
+                            className={`h-1 rounded-full animate-progress ${prog.accuracy < 50 ? 'bg-red-500' : prog.accuracy < 75 ? 'bg-amber-500' : 'bg-emerald-500'
+                              }`}
                             style={{ width: `${prog.accuracy}%` }}
                           />
                         </div>

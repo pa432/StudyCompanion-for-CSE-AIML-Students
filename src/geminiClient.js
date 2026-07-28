@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai'
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || ''
-const MODEL_NAME = 'gemini-2.5-flash'
+const MODEL_NAME = 'gemini-3.5-flash-lite'
 
 let ai = null
 if (GEMINI_API_KEY) {

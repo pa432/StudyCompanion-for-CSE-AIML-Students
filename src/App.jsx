@@ -27,7 +27,7 @@ export default function App() {
   // Topic selection & difficulty
   const [selectedTopic, setSelectedTopic] = useState(null)
   const [selectedSubtopic, setSelectedSubtopic] = useState(null)
-  const [difficulty, setDifficulty] = useState('medium')
+
 
   // Quiz state
   const [quizQuestion, setQuizQuestion] = useState(null)
@@ -134,6 +134,14 @@ export default function App() {
     setSelectedTopic(tName)
     setSelectedSubtopic(sName)
 
+    let dynamicDifficulty = 'medium'
+    const p = progress.find((item) => item.topic === tName && item.subtopic === sName)
+    if (p && p.total_attempts > 0) {
+      const accuracy = p.correct_attempts / p.total_attempts
+      if (accuracy > 0.8) dynamicDifficulty = 'hard'
+      else if (accuracy < 0.4) dynamicDifficulty = 'easy'
+    }
+
     setGeneratingQuestion(true)
     setQuizQuestion(null)
     setSubmittedAnswer(false)
@@ -142,7 +150,7 @@ export default function App() {
     setActiveTab('quiz')
 
     try {
-      const q = await generateQuizQuestion(tName, sName, difficulty)
+      const q = await generateQuizQuestion(tName, sName, dynamicDifficulty)
       setQuizQuestion(q)
     } catch (err) {
       console.error('Quiz generation failed:', err)
@@ -180,7 +188,7 @@ export default function App() {
           user_id: session.user.id,
           topic: quizQuestion.topic || selectedTopic,
           subtopic: quizQuestion.subtopic || selectedSubtopic,
-          difficulty: quizQuestion.difficulty || difficulty,
+          difficulty: quizQuestion.difficulty,
           question_type: quizQuestion.question_type,
           question: quizQuestion,
           user_answer: userAnswer,
@@ -292,8 +300,7 @@ export default function App() {
             setSelectedTopic={setSelectedTopic}
             selectedSubtopic={selectedSubtopic}
             setSelectedSubtopic={setSelectedSubtopic}
-            difficulty={difficulty}
-            setDifficulty={setDifficulty}
+
             onStartPractice={(t, s) => startPractice(t, s)}
             onStartChat={(t, s) => startChat(t, s)}
             setActiveTab={setActiveTab}
@@ -307,6 +314,8 @@ export default function App() {
             setActiveTab={setActiveTab}
             selectedTopic={selectedTopic}
             selectedSubtopic={selectedSubtopic}
+            progress={progress}
+            startPractice={(t, s) => startPractice(t, s)}
           />
         )}
 
@@ -323,8 +332,7 @@ export default function App() {
             onAskTutor={(t, s) => startChat(t, s)}
             selectedTopic={selectedTopic}
             selectedSubtopic={selectedSubtopic}
-            difficulty={difficulty}
-            setDifficulty={setDifficulty}
+
           />
         )}
 
