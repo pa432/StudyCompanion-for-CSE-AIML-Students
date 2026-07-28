@@ -1,4 +1,4 @@
-# Study Companion 🎓 (IgniteX HackFest 2026)
+# Study Companion 🎓 (HackFest 2026)
 
 An AI-powered practice and progress-tracking web application designed for B.Tech AI/ML coursework (Python OOP, Dynamic Programming, Graph Algorithms).
 
